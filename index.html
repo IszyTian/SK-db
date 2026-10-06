@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sukuma Fresh - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">🧺 Sukuma Fresh</div>
+        <nav id="nav-menu">
+            <a href="index.html" class="active">Home</a>
+            <a href="catalogue.html">Catalogue</a>
+            <a href="sales.html">Flash Sales</a>
+            <a href="register.html">Register</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html" >Login</a>
+        </nav>
+        <div class="cart-icon" id="cart-toggle">🛒 Cart (<span id="cart-count">0</span>)</div>
+    </header>
+
+    <main class="page-section">
+        <div class="hero">
+            <h1>Fresh Vegetables Delivered to Your Doorstep</h1>
+            <p>High-quality, locally sourced organic produce at the best KES rates.</p>
+            <a href="catalogue.html"><button class="btn">Shop Now</button></a>
+        </div>
+    </main>
+
+    <!-- Sidebar Cart inclusion template across layout panels -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header"><h3>Your Shopping Cart</h3><span class="close-cart" id="close-cart">&times;</span></div>
+        <div id="cart-items-container"></div>
+        <div class="cart-summary">
+            <h4>Total: KES <span id="cart-total-price">0</span></h4>
+            <button class="btn checkout-btn" id="open-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2>Checkout Details</h2>
+            <form id="checkout-form">
+                <label>Delivery Address</label><input type="text" required placeholder="Estate, Street name">
+                <label>Payment Method</label>
+                <select><option value="mpesa">M-Pesa Cash on Delivery</option></select>
+                <button type="submit" class="btn">Place Order (KES <span id="modal-total">0</span>)</button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Sukuma Fresh. All Rights Reserved.</p></footer>
+    <script src="script1.js"></script>
+</body>
+</html>
