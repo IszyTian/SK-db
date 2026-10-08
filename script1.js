@@ -8,11 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // ... rest of your existing load actions
 
 
-    // Fetch live products out of your MySQL database via PHP
-    fetch('https://onrender.com')
+
+                // Fetch live products out of your MySQL database via PHP
+    fetch('api.php?action=get_products')
         .then(response => response.json())
         .then(data => {
-            products = data; // Assign database data to your global products reference
+// Assign database data to your global products reference
+            products = data;
             
             // Re-fire template loads with database contents
             if (document.getElementById('product-list')) {
