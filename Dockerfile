@@ -1,8 +1,9 @@
 # Use an official PHP image with Apache
 FROM php:8.2-apache
 
-# Install system dependencies and clean up cache to keep image size small
+# CRITICAL FIX: Install system dependencies, updates, and secure CA certificates
 RUN apt-get update && apt-get install -y \
+    ca-certificates \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -26,8 +27,3 @@ RUN chown -R www-data:www-data /var/www/html
 # Expose port 80 for web traffic
 EXPOSE 80
 
-RUN chown -R www-data:www-data /var/www/html
-
-
-# Expose port 80 for web traffic
-EXPOSE 80
