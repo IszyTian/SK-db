@@ -1,4 +1,3 @@
-
 <?php
 // Read variables injected by Render at runtime
 $host = getenv('mysql-1b2839ab-daisybaraka-0b08.b.aivencloud.com');
