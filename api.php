@@ -12,10 +12,6 @@ header("Content-Type: application/json; charset=UTF-8");
 include 'db.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-// ... the rest of your file remains the same
-
-
-$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // 1. Fetch products for catalog or flash sales
 if ($action == 'get_products') {
@@ -30,12 +26,13 @@ if ($action == 'get_products') {
             'name' => $p['name'],
             'category' => $p['category'],
             'price' => (float)$p['price'],
-            'image' => $p['image_url'],
+            'image' => $p['image_url'], // Maps database image_url column to JS product.image
             'isSale' => (bool)$p['is_sale'],
             'salePrice' => $p['sale_price'] !== null ? (float)$p['sale_price'] : null
         ];
     }
     echo json_encode($formatted);
+    exit;
 }
 
 // 2. Handle customer checkouts securely
@@ -53,18 +50,11 @@ if ($action == 'place_order') {
         try {
             $pdo->beginTransaction();
             
-            // Insert primary order document
-            $stmt = $pdo->prepare("INSERT INTO orders (delivery_address, payment_method, total_amount) VALUES (?, ?, ?)");
-            $stmt->execute([$data['address'], $data['payment_method'], $data['total']]);
-            $orderId = $pdo->lastInsertId();
-            
-            // Insert primary order document with explicit user binding assignment
-            $stmt = $pdo->prepare("INSERT INTO orders (user_id, fulfillment_method, delivery_address, delivery_date, payment_method, total_amount) VALUES (?, ?, ?, ?, ?, ?)");
+            // Insert primary order document with available JavaScript payload fields
+            $stmt = $pdo->prepare("INSERT INTO orders (user_id, delivery_address, payment_method, total_amount) VALUES (?, ?, ?, ?)");
             $stmt->execute([
                 $_SESSION['user_id'], 
-                $data['fulfillment'], 
                 $data['address'], 
-                $data['delivery_date'], 
                 $data['payment_method'], 
                 $data['total']
             ]);
@@ -78,10 +68,16 @@ if ($action == 'place_order') {
             
             $pdo->commit();
             echo json_encode(['success' => true, 'message' => 'Order logged inside database!']);
+            exit;
         } catch (Exception $e) {
             $pdo->rollBack();
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            exit;
         }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Missing cart items or delivery address.']);
+        exit;
     }
 }
 ?>
+
