@@ -1,42 +1,32 @@
-<?php
-// Read the master connection string injected automatically by Render
-$url_str = getenv('DATABASE_URL') ?: '';
+# Use an official PHP image with Apache
+FROM php:8.2-apache
 
-if (empty($url_str)) {
-    header("Content-Type: text/plain");
-    die("DOCKER_ENVIRONMENT_ERROR: DATABASE_URL variable is missing in Render settings.");
-}
+# Install secure CA certificates and system packages
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-// Parse the Aiven URL components automatically
-$db_config = parse_url($url_str);
+# Install both PDO MySQL and MySQLi extensions for Aiven MySQL connection
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-$host = isset($db_config['host']) ? $db_config['host'] : '';
-$port = isset($db_config['port']) ? $db_config['port'] : '3306';
-$username = isset($db_config['user']) ? $db_config['user'] : '';
-$password = isset($db_config['pass']) ? $db_config['pass'] : '';
-$dbname = isset($db_config['path']) ? ltrim($db_config['path'], '/') : '';
+# Enable Apache rewrite module
+RUN a2enmod rewrite
 
-if (($pos = strpos($dbname, '?')) !== false) {
-    $dbname = substr($dbname, 0, $pos);
-}
+# Set the working directory
+WORKDIR /var/www/html
 
-try {
-    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
-    
-    // Optimized Option flags for Aiven MySQL 8 connections
-    $options = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        // Using raw integers guarantees driver stability in case the constant macro is unassigned
-        1012 => '/etc/ssl/certs/ca-certificates.crt', // Equivalent to PDO::MYSQL_ATTR_SSL_CA
-        1014 => false,                                // Equivalent to PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT
-    ];
+# Copy your website files to the Apache server directory
+COPY . /var/www/html/
 
-    $pdo = new PDO($dsn, $username, $password, $options);
-} catch (PDOException $e) {
-    header("Content-Type: text/plain");
-    die("AIVEN_CONNECTION_ERROR: " . $e->getMessage());
-}
+# Ensure Apache has the correct permissions to read your files
+RUN chown -R www-data:www-data /var/www/html
+
+# Expose port 80 for web traffic
+EXPOSE 80
+
 ?>
 
 
