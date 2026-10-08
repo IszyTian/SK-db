@@ -7,11 +7,17 @@ FROM php:8.2-apache
 # For PostgreSQL:
 RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
-# For MySQL:
-# RUN docker-php-ext-install pdo pdo_mysql
+ 
 
 # Copy your website files to the Apache server directory
 COPY . /var/www/html/
+FROM php:8.2-apache
+# Installs both PDO and MySQLi extensions to cover all codebases
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN a2enmod rewrite
+
+RUN chown -R www-data:www-data /var/www/html
+
 
 # Expose port 80 for web traffic
 EXPOSE 80

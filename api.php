@@ -1,12 +1,19 @@
 <?php
+// Start session and error reporting before ANY output or headers
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Start session processing at the very top of the script
-session_start();
-header('Content-Type: application/json');
+// Set clean, non-conflicting headers
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+
 include 'db.php';
+
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+// ... the rest of your file remains the same
+
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 

@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // Fetch live products out of your MySQL database via PHP
-    fetch('api.php?action=get_products')
+    fetch('https://onrender.com')
         .then(response => response.json())
         .then(data => {
             products = data; // Assign database data to your global products reference
