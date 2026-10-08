@@ -1,20 +1,30 @@
 # Use an official PHP image with Apache
 FROM php:8.2-apache
 
-# Install extensions needed for database connections (PDO)
-# Un-comment the ones you need based on your database type:
+# Install system dependencies and clean up cache to keep image size small
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# For PostgreSQL:
-RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
+# Install both PDO MySQL and MySQLi extensions for Aiven MySQL connection
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
- 
+# Enable Apache rewrite module
+RUN a2enmod rewrite
+
+# Set the working directory
 WORKDIR /var/www/html
+
 # Copy your website files to the Apache server directory
 COPY . /var/www/html/
 
-# Installs both PDO and MySQLi extensions to cover all codebases
-RUN docker-php-ext-install pdo pdo_mysql mysqli
-RUN a2enmod rewrite
+# Ensure Apache has the correct permissions to read your files
+RUN chown -R www-data:www-data /var/www/html
+
+# Expose port 80 for web traffic
+EXPOSE 80
 
 RUN chown -R www-data:www-data /var/www/html
 
