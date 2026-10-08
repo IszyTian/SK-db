@@ -1,16 +1,11 @@
 
 <?php
 // Read variables injected by Render at runtime
-$host = getenv('mysql://avnadmin:AVNS_sxGs59zbIjrHUKlp0J3@mysql-1b2839ab-daisybaraka-0b08.b.aivencloud.com:23245/defaultdb?ssl-mode=REQUIRED');
+$host = getenv('mysql-1b2839ab-daisybaraka-0b08.b.aivencloud.com');
 $port = getenv('23245');
 $dbname = getenv('defaultdb');
 $username = getenv('avnadmin');
 $password = getenv('AVNS_sxGs59zbIjrHUKlp0J3');
-
-// Validate that environment variables are loaded to prevent fallback to localhost
-if (!$host || !$dbname || !$username || !$password) {
-    die("Database configuration variables are missing in the Render Environment settings.");
-}
 
 try {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
