@@ -27,7 +27,7 @@ RUN chown -R www-data:www-data /var/www/html
 # Expose port 80 for web traffic
 EXPOSE 80
 
-?>
+
 
 
 
