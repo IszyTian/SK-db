@@ -1,4 +1,4 @@
-<?php
+?php
 // 1. Session must start before ANY other file loading or output happens
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
