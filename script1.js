@@ -86,12 +86,13 @@ function displayProducts(list, elementId, salesOnly) {
         if (salesOnly && !product.isSale) return;
         const currentPrice = product.isSale ? product.salePrice : product.price;
         
+        // Note the backslash (\) before the inner dollar sign below
         grid.innerHTML += `
-            <div class="product-card"  style=" color:black;">
+            <div class="product-card" style="color:black;">
                 ${product.isSale ? '<span class="badge">SALE</span>' : ''}
                 <img src="${product.image}" alt="${product.name}">
                 <h3>${product.name}</h3>
-                <p class="price">Ksh ${currentPrice} ${product.isSale ? ` <span style="text-decoration:line-through; color:gray; font-size:14px;">Ksh ${product.price}</span>` : ''}</p>
+                <p class="price">Ksh ${currentPrice} ${product.isSale ? `<span style="text-decoration:line-through; color:gray; font-size:14px;">Ksh \${product.price}</span>` : ''}</p>
                 <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
             </div>
         `;
