@@ -1,3 +1,17 @@
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  ssl: {
+    // Aiven uses trusted CAs, so enforcing connection encryption is typically sufficient
+    rejectUnauthorized: true 
+  }
+});
+
 // Remove the hardcoded products array entirely!
 let products = [];
 let cart = JSON.parse(localStorage.getItem('sukuma_cart')) || []; // Keep existing line
@@ -89,7 +103,7 @@ function displayProducts(list, elementId, salesOnly) {
                 ${product.isSale ? '<span class="badge">SALE</span>' : ''}
                 <img src="${product.image}" alt="${product.name}">
                 <h3>${product.name}</h3>
-                <p class="price"><span ;">Ksh ${currentPrice}</span> ${product.isSale ? `<span style="text-decoration:line-through; color:gray; font-size:14px;">Ksh \${product.price}</span>` : ''}</p>
+                <p class="price">Ksh ${currentPrice} ${product.isSale ? `<span style="text-decoration:line-through; color:gray; font-size:14px;">Ksh ${product.price}</span>` : ''}</p>
                 <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
             </div>
         `;
