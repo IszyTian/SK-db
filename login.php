@@ -1,4 +1,4 @@
-?php
+<?php
 // 1. Session must start before ANY other file loading or output happens
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -16,7 +16,7 @@ try {
     require 'db.php'; 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Fallback: Checks for 'email' first, if missing checks for 'username'
+        // Look for the email field submitted by the form layout
         $email = isset($_POST['email']) ? trim($_POST['email']) : (isset($_POST['username']) ? trim($_POST['username']) : '');
         $password = isset($_POST['password']) ? $_POST['password'] : '';
 
@@ -25,9 +25,9 @@ try {
             exit;
         }
 
-        // Query the record matching either the email column or username column depending on your schema setup
-        $stmt = $pdo->prepare("SELECT id, full_name, password_hash FROM users WHERE email = ? OR username = ?");
-        $stmt->execute([$email, $email]);
+        // FIXED: Only query using the email column since 'username' does not exist in your schema
+        $stmt = $pdo->prepare("SELECT id, full_name, password_hash FROM users WHERE email = ?");
+        $stmt->execute([$email]);
         $user = $stmt->fetch();
 
         // Verify user existence and decrypt password safely 
@@ -42,7 +42,7 @@ try {
             ]);
             exit;
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid credentials provided.']);
+            echo json_encode(['success' => false, 'message' => 'Invalid email or password credentials.']);
             exit;
         }
     } else {
@@ -55,4 +55,3 @@ try {
     exit;
 }
 ?>
-
