@@ -33,13 +33,11 @@ try {
 
     $pdo = new PDO($dsn, $username, $password, $options);
 } catch (PDOException $e) {
-    header("Content-Type: text/plain");
-    die("AIVEN_CONNECTION_ERROR: " . $e->getMessage());
-}
-?>
-
-    header("Content-Type: text/plain");
-    echo "EXACT_ERROR: " . $e->getMessage();
+  // If the database crashes, return a JSON error instead of breaking text
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => "AIVEN_CONNECTION_ERROR: " . $e->getMessage()]);
     exit;
 }
 ?>
+
+    
