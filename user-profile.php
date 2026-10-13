@@ -1,9 +1,8 @@
 <?php
 // 1. Initialise core application security checks
 session_start();
-require 'db.php'; // Inherit explicit local connection structures
+require 'db.php'; 
 
-// Enforce authentication context walls
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit;
@@ -17,7 +16,6 @@ $error_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
 
-    // Action A: Update generic address and demographic tracking fields
     if ($action == 'update_profile') {
         $phone = trim($_POST['phone_number']);
         $address = trim($_POST['default_address']);
@@ -32,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Action B: Process password migration securely
     if ($action == 'change_password') {
         $current_password = $_POST['current_password'];
         $new_password = $_POST['new_password'];
@@ -44,18 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "New password confirmation does not match.";
         } else {
             try {
-                // Fetch the authenticated user's current password cryptographic hash blueprint
                 $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
                 $stmt->execute([$user_id]);
                 $user = $stmt->fetch();
 
                 if ($user && password_verify($current_password, $user['password_hash'])) {
-                    // Re-hash new passwords safely prior to writing to long-term storage
                     $new_hash = password_hash($new_password, PASSWORD_BCRYPT);
-                    
                     $updateStmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
                     $updateStmt->execute([$new_hash, $user_id]);
-                    $success_message = "Password modified safely! Use your new credentials on next sign-in.";
+                    $success_message = "Password modified safely!";
                 } else {
                     $error_message = "The current password you provided is invalid.";
                 }
@@ -66,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// 3. Always pull the latest operational record sets for clean interface generation
 try {
     $stmt = $pdo->prepare("SELECT full_name, email, phone_number, default_address, default_payment_method FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
@@ -111,12 +104,11 @@ try {
     <div class="header-section">
         <h1>Account Dashboard Settings</h1>
         <div>
-            <a href="profile.php" class="nav-btn">📋 View Orders</a>
+            <a href="profile.php" class="nav-btn">📋 View Dashboard</a>
             <a href="logout.php" class="nav-btn" style="color: #e53e3e;">Sign Out</a>
         </div>
     </div>
 
-    <!-- Feedback banner loops -->
     <?php if(!empty($success_message)): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($success_message); ?></div>
     <?php endif; ?>
@@ -124,20 +116,20 @@ try {
         <div class="alert alert-danger"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
 
-    <!-- CARD 1: Core demographic metadata tracking profiles -->
     <div class="section-card">
         <h2>Delivery & Contact Blueprint Settings</h2>
+        <!-- FIXED: Action maps directly to itself to process structural updates safely -->
         <form method="POST" action="user-profile.php">
             <input type="hidden" name="action" value="update_profile">
             
             <div class="form-row">
                 <label>Full Name</label>
-                <input type="text" value="<?php echo htmlspecialchars($profile['full_name']); ?>" disabled>
+                <input type="text" value="<?php echo htmlspecialchars($profile['full_name'] ?? ''); ?>" disabled>
             </div>
             
             <div class="form-row">
                 <label>Registered Email Address</label>
-                <input type="email" value="<?php echo htmlspecialchars($profile['email']); ?>" disabled>
+                <input type="email" value="<?php echo htmlspecialchars($profile['email'] ?? ''); ?>" disabled>
             </div>
 
             <div class="form-row">
@@ -153,8 +145,8 @@ try {
             <div class="form-row">
                 <label for="default_payment_method">Preferred Saved Payment Strategy</label>
                 <select id="default_payment_method" name="default_payment_method">
-                    <option value="mpesa" <?php echo ($profile['default_payment_method'] == 'mpesa') ? 'selected' : ''; ?>>M-Pesa Express</option>
-                    <option value="cod" <?php echo ($profile['default_payment_method'] == 'cod') ? 'selected' : ''; ?>>Cash / Lipa na M-Pesa on Delivery</option>
+                    <option value="mpesa" <?php echo (($profile['default_payment_method'] ?? '') == 'mpesa') ? 'selected' : ''; ?>>M-Pesa Express</option>
+                    <option value="cod" <?php echo (($profile['default_payment_method'] ?? '') == 'cod') ? 'selected' : ''; ?>>Cash / Lipa na M-Pesa on Delivery</option>
                 </select>
             </div>
 
@@ -162,9 +154,9 @@ try {
         </form>
     </div>
 
-    <!-- CARD 2: Security boundary migrations -->
     <div class="section-card">
         <h2>Security Strategy - Change Access Password</h2>
+        <!-- FIXED: Action maps directly to itself to process password hashing changes safely -->
         <form method="POST" action="user-profile.php">
             <input type="hidden" name="action" value="change_password">
             
