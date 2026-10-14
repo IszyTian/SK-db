@@ -403,3 +403,102 @@ footer {
 .modal-content .btn:hover {
     background-color: #2e7d32;
 }
+/* ==========================================================================
+   FORCE HORIZONTAL CONTENT TO STACK VERTICALLY
+   ========================================================================== */
+
+/* Fix the core container box of the popup */
+.modal-content {
+    background-color: #ffffff !important;
+    padding: 30px !important;
+    border-radius: 8px !important;
+    width: 90% !important;
+    max-width: 480px !important;
+    position: relative !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+    
+    /* CRITICAL FIX: Force all inside elements to flow downwards, never sideways */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+}
+
+/* Ensure the form inside tracks vertically */
+#checkout-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    width: 100% !important;
+}
+
+/* Fix structural container row constraints */
+.modal-content .form-row {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+/* Fix radio option block grouping text alignments */
+.modal-content .radio-group {
+    display: flex !important;
+    flex-direction: column !important; /* Forces buttons to sit on top of each other */
+    gap: 10px !important;
+    margin-top: 5px !important;
+    width: 100% !important;
+}
+
+/* Wrap the radio item targets nicely */
+.modal-content .radio-label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    background: #f8fafc !important;
+    padding: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    color: #333333 !important;
+}
+
+/* Fix the textarea layout width sizing */
+.modal-content textarea {
+    width: 100% !important;
+    min-height: 80px !important;
+    padding: 10px !important;
+    border: 1px solid #cbd5e0 !important;
+    border-radius: 6px !important;
+    resize: none !important;
+}
+
+/* Total price banner row box design */
+.modal-content .total-row {
+    background-color: #f4f6f8 !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    border-left: 4px solid #1b5e20 !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+/* Main Submission Request Action Button styling */
+.modal-content .btn {
+    width: 100% !important;
+    background-color: #1b5e20 !important;
+    color: white !important;
+    padding: 14px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+.modal-content .btn:hover {
+    background-color: #2e7d32 !important;
+}
