@@ -46,19 +46,17 @@
         
         <form id="checkout-form">
             <div class="form-row">
-                <label for="delivery-address">Delivery Physical Address / Apartment / Estate</label>
+                <label for="delivery-address">Delivery Physical Address / Apartment / Estate</label> <br>
                 <textarea id="delivery-address" name="address" placeholder="e.g. Kilimani Broadview Apartments, House 3A, Nairobi" required></textarea>
             </div>
 
             <div class="form-row">
                 <label>Payment Selection Strategy</label>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="mpesa" checked> M-Pesa Express
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="payment" value="cod"> Cash / Lipa na M-Pesa on Delivery
-                    </label>
+                    <label class="radio-label"> M-Pesa Express</label>
+                     <input type="radio" name="payment" value="mpesa" checked><br>
+                    <label class="radio-label"> Cash / Lipa na M-Pesa on Delivery </label>
+                    <input type="radio" name="payment" value="cod">
                 </div>
             </div>
 
