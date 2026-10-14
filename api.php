@@ -35,38 +35,38 @@ if ($action == 'get_products') {
     exit;
 }
 
+
 // 2. Handle customer checkouts securely
 if ($action == 'place_order') {
-
-    // CRITICAL SECURITY CHECK: Terminate immediately if user session isn't found
+    // CRITICAL SECURITY CHECK: Enforce logged-in authentication context
     if (!isset($_SESSION['user_id'])) {
         echo json_encode(['success' => false, 'message' => 'Unauthorized. You must log in to checkout.']);
         exit;
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
-
-      // FIXED: Let authentication screening pass if it's just a verification check ping
+    
     if (isset($data['check_auth_only']) && $data['check_auth_only'] === true) {
         echo json_encode(['success' => true, 'message' => 'Authorized session validated.']);
         exit;
     }
-    
+
     if(!empty($data['cart']) && !empty($data['address'])) {
         try {
             $pdo->beginTransaction();
             
-            // Insert primary order document with available JavaScript payload fields
-            $stmt = $pdo->prepare("INSERT INTO orders (user_id, delivery_address, payment_method, total_amount) VALUES (?, ?, ?, ?)");
+            // FIXED: Added delivery_date to the column listing and bound the current system date below
+            $stmt = $pdo->prepare("INSERT INTO orders (user_id, delivery_address, payment_method, total_amount, delivery_date) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([
                 $_SESSION['user_id'], 
                 $data['address'], 
                 $data['payment_method'], 
-                $data['total']
+                $data['total'],
+                date('Y-m-d') // Automatically generates the current date (e.g., 2026-10-14)
             ]);
             $orderId = $pdo->lastInsertId();
 
-            // Insert mapped cart row entries
+            // Insert matching individual item columns
             $itemStmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)");
             foreach($data['cart'] as $item) {
                 $itemStmt->execute([$orderId, $item['id'], $item['quantity'], $item['price']]);
@@ -77,13 +77,14 @@ if ($action == 'place_order') {
             exit;
         } catch (Exception $e) {
             $pdo->rollBack();
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            echo json_encode(['success' => false, 'message' => 'Database failure: ' . $e->getMessage()]);
             exit;
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Missing cart items or delivery address.']);
+        echo json_encode(['success' => false, 'message' => 'Missing cart items or delivery address detail configurations.']);
         exit;
     }
 }
+
 ?>
 
