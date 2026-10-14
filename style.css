@@ -291,3 +291,115 @@ footer {
         flex-direction: column;
     }
 }
+/* ==========================================================================
+   Checkout Modal Form Enhancements
+   ========================================================================== */
+.modal-content h2 {
+    color: #1b5e20;
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 10px;
+}
+
+.modal-content .form-row {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.modal-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2b2d42;
+    font-size: 14px;
+}
+
+.modal-content textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+/* Radio Selection Elements Setup */
+.modal-content .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.modal-content .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #f8fafc;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin: 0;
+    transition: background 0.2s ease;
+}
+
+.modal-content .radio-label:hover {
+    background: #f1f5f9;
+}
+
+.modal-content input[type="radio"] {
+    width: auto;
+    margin: 0;
+    accent-color: #1b5e20;
+    cursor: pointer;
+}
+
+/* Total Row & Submission Pricing Buttons */
+.modal-content .total-row {
+    background-color: #f4f6f8;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border-left: 4px solid #1b5e20;
+}
+
+.modal-content .total-row p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b2d42;
+}
+
+.modal-content #modal-total {
+    font-size: 18px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.modal-content .btn {
+    width: 100%;
+    background-color: #1b5e20;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-top: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.modal-content .btn:hover {
+    background-color: #2e7d32;
+}
