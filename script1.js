@@ -267,43 +267,73 @@ function setupEventListeners() {
     }
 
     // Dynamic Checkout Form Submission Handling
-    const checkoutForm = document.getElementById('checkout-form');
-    if(checkoutForm) {
-        checkoutForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const address = document.getElementById('delivery-address').value; 
-            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
-            const total = parseFloat(document.getElementById('modal-total').textContent);
+    // Locate this block near the bottom of setupEventListeners() in script1.js
+const checkoutForm = document.getElementById('checkout-form');
+if(checkoutForm) {
+    checkoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const addressField = document.getElementById('delivery-address');
+        const totalField = document.getElementById('modal-total');
 
-            const orderData = {
-                address: address,
-                payment_method: paymentMethod,
-                total: total,
-                cart: cart
-            };
+        // Safety check to ensure form inputs exist in the current layout configuration
+        if (!addressField) {
+            alert("Error: HTML input element with ID 'delivery-address' was not found on this page.");
+            return;
+        }
 
-            fetch('api.php?action=place_order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if(resData.success) {
-                    alert("Success! Order placed safely in database. We will contact you shortly.");
-                    cart = [];
-                    saveAndRefreshCart();
-                    document.getElementById('checkout-modal').classList.remove('open');
-                    document.getElementById('cart-sidebar').classList.remove('open');
-                    e.target.reset();
-                    window.location.href = "index.html";
-                } else {
-                    alert("Database Error: " + resData.message);
-                }
-            });
+        const address = addressField.value.trim(); 
+        const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+        const total = totalField ? parseFloat(totalField.textContent) : 0;
+
+        // Validation wall: Halt transmission if user left fields blank
+        if (!address) {
+            alert("Please input a valid physical delivery address before submitting your checkout!");
+            return;
+        }
+
+        if (cart.length === 0) {
+            alert("Your shopping cart is empty!");
+            return;
+        }
+
+        const orderData = {
+            address: address,
+            payment_method: paymentMethod,
+            total: total,
+            cart: cart
+        };
+
+        // Send payload safely directly into the Aiven database endpoint
+        fetch('api.php?action=place_order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Server responded with standard HTTP network error.");
+            return res.json();
+        })
+        .then(resData => {
+            if(resData.success) {
+                alert("Success! Order placed safely in database. We will contact you shortly.");
+                cart = []; // Flush active memory caches
+                saveAndRefreshCart();
+                document.getElementById('checkout-modal').classList.remove('open');
+                document.getElementById('cart-sidebar').classList.remove('open');
+                checkoutForm.reset();
+                window.location.href = "profile.php"; // Redirect straight to the customer dashboard order logs!
+            } else {
+                alert("Database Error: " + resData.message);
+            }
+        })
+        .catch(err => {
+            console.error("Order Transmission Failure Error Context:", err);
+            alert("Network connection error. Could not establish communication with server engine.");
         });
-    }
+    });
+}
+
 
     // NEW: Dynamic Login Form Submission Handling
     const loginForm = document.getElementById('login-form');
