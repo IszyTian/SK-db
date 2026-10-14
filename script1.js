@@ -189,31 +189,36 @@ function setupEventListeners() {
     if(cartToggle) cartToggle.addEventListener('click', () => cartSidebar.classList.add('open'));
     if(closeCart) closeCart.addEventListener('click', () => cartSidebar.classList.remove('open'));
 
-        if (openCheckout) {
-        openCheckout.addEventListener('click', () => {
-            if (cart.length === 0) {
-                alert("Your shopping cart is empty!");
-                return;
-            }
+       if (openCheckout) {
+    openCheckout.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert("Your shopping cart is empty!");
+            return;
+        }
 
-            // Quick network request check to see if user session is valid on server
-            fetch('api.php?action=place_order', { method: 'POST', body: JSON.stringify({}) }) 
-            .then(res => res.json())
-            .then(data => {
-                if (data.message === 'Unauthorized. You must log in to checkout.') {
-                    alert("Please sign in or register before checking out!");
-                    window.location.href = "login.html";
-                } else {
-                    // Authorized path
-                    checkoutModal.classList.add('open');
-                }
-            })
-            .catch(() => {
-                // If it fails with an empty payload validation error instead of unauthorized, user is logged in
+        // FIXED: Send an explicit validation check flag so it passes backend filtering rules
+        fetch('api.php?action=place_order', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ check_auth_only: true }) 
+        }) 
+        .then(res => res.json())
+        .then(data => {
+            if (data.message === 'Unauthorized. You must log in to checkout.') {
+                alert("Please sign in or register before checking out!");
+                window.location.href = "login.html";
+            } else {
+                // Authorized profile path verified successfully
                 checkoutModal.classList.add('open');
-            });
+            }
+        })
+        .catch(() => {
+            // Fallback screen execution safety trigger
+            checkoutModal.classList.add('open');
         });
-    }
+    });
+}
+
 
     if(closeModal) closeModal.addEventListener('click', () => checkoutModal.classList.remove('open'));
 
