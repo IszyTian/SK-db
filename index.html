@@ -38,21 +38,28 @@
         </div>
     </div>
 
-    <div class="modal" id="checkout-modal">
-        <div class="modal-content">
-            <span class="close-modal" id="close-modal">&times;</span>
-            <h2>Checkout Details</h2>
-           <form id="checkout-form">
+  <!-- Locate and replace your checkout modal with this exact block -->
+<div id="checkout-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-modal" class="close-modal">&times;</span>
+        <h2>Complete Your Checkout Order</h2>
+        
+        <form id="checkout-form">
             <div class="form-row">
-                <label for="delivery-address">Delivery Physical Address / Apartment / Estate</label><br>
-                <!-- CRITICAL FIXED ID MATCH: Must be 'delivery-address' -->
+                <label for="delivery-address">Delivery Physical Address / Apartment / Estate</label>
                 <textarea id="delivery-address" name="address" placeholder="e.g. Kilimani Broadview Apartments, House 3A, Nairobi" required></textarea>
             </div>
 
             <div class="form-row">
                 <label>Payment Selection Strategy</label>
-                <label><input type="radio" name="payment" value="mpesa" checked> M-Pesa Express</label>
-                <label><input type="radio" name="payment" value="cod"> Cash / Lipa na M-Pesa on Delivery</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="mpesa" checked> M-Pesa Express
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment" value="cod"> Cash / Lipa na M-Pesa on Delivery
+                    </label>
+                </div>
             </div>
 
             <div class="total-row">
@@ -61,8 +68,9 @@
 
             <button type="submit" class="btn">Place Order Securely</button>
         </form>
-        </div>
     </div>
+</div>
+
 
     <footer><p>&copy; 2026 Sukuma Fresh. All Rights Reserved.</p></footer>
     <script src="script1.js"></script>
