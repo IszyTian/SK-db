@@ -10,7 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // 2. Validate Order Parameter
-$order_id = isset($_GET['id']) ? (int)$GET['id'] : 0;
+$order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
 if ($order_id <= 0) {
     die("Error: Invalid or missing Order ID parameter.");
 }
