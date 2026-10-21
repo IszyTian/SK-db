@@ -38,6 +38,6 @@ try {
     echo json_encode(['success' => false, 'message' => "AIVEN_CONNECTION_ERROR: " . $e->getMessage()]);
     exit;
 }
-?>
+
 
     
