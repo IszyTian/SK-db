@@ -90,6 +90,7 @@ try {
                             <th>Delivery Target Date</th>
                             <th>Payment Option</th>
                             <th>Total Cost</th>
+                            <th>Receipt Actions</th> <!-- Add this column -->
                         </tr>
                     </thead>
                     <tbody>
@@ -104,6 +105,11 @@ try {
                                 <td><?php echo htmlspecialchars($order['delivery_date'] ?? 'Processing...'); ?></td>
                                 <td><?php echo htmlspecialchars(strtoupper($order['payment_method'])); ?></td>
                                 <td><span style="font-weight: bold; color: #2e7d32;">Ksh <?php echo number_format($order['total_amount'], 2); ?></span></td>
+    <!-- Dynamic Receipt Access Links Injection Blocks -->
+                               <td>
+                                 <a href="receipt.php?id=<?php echo $order['id']; ?>" class="btn-gray" style="padding: 4px 8px; font-size: 13px; border-radius: 4px; margin-right: 5px;">🔍 View</a>
+                                <a href="receipt.php?id=<?php echo $order['id']; ?>&download=1" class="btn-green" style="padding: 4px 8px; font-size: 13px; border-radius: 4px;">📥 Save</a>
+                            </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
