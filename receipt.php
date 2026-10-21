@@ -1,4 +1,6 @@
 <?php
+// 1. Initialize output buffering and core session protocols
+ob_start(); // 🟢 ADD THIS LINE AS THE VERY FIRST ACTION
 // 1. Initialize core session and error validation protocols
 session_start();
 require 'db.php'; // Pulls the clean Aiven MySQL PDO configuration
@@ -52,6 +54,8 @@ try {
 
 // 5. Check if download configuration header flag is active
 if (isset($_GET['download']) && $_GET['download'] == '1') {
+      // Clear any accidental text or whitespaces caught by the buffer before downloading
+    ob_clean(); 
     header('Content-Type: text/html; charset=utf-8');
     header('Content-Disposition: attachment; filename="Sukuma_Fresh_Receipt_#' . $order_id . '.html"');
 }
