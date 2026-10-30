@@ -176,6 +176,13 @@ footer {
 
 .form-row, .form-group {
     margin-bottom: 18px;
+    max-width: 650px;
+    margin: 0 auto;
+    background: #55e888;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 35px;
+    box-sizing: border-box;
 }
 
 label {
@@ -562,6 +569,14 @@ textarea {
 }
 
 .total-row {
+    margin-bottom: 18px;
+    max-width: 650px;
+    margin: 0 auto;
+    background: #fbfbfb;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 35px;
+    box-sizing: border-box;
     margin: 15px 0;
     font-size: 18px;
     font-weight: bold;
